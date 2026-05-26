@@ -16,6 +16,8 @@ public class Model {
     /** Current score. */
     private int score;
 
+    private boolean isAnyTileMoved = false;
+
     /* Coordinate System: column x, row y of the board (where x = 0,
      * y = 0 is the lower-left corner of the board) will correspond
      * to board.tile(x, y).  Be careful!
@@ -166,6 +168,27 @@ public class Model {
         int myValue = currTile.value();
         int targetY = y;
 
+        for (int i = y+1; i < board.size(); i++) {
+            Tile otherTile = board.tile(x, i);
+
+            if (otherTile == null) {
+                targetY = i;
+            }
+            else if (otherTile.value() == myValue && !otherTile.wasMerged()) {
+                targetY = i;
+
+
+            }
+            else {
+                break;
+            }
+        }
+
+        if (targetY > y) {
+            board.move(x,targetY,currTile);
+            isAnyTileMoved = true;
+        }
+
         // TODO: Tasks 5, 6, and 10. Fill in this function.
     }
 
@@ -174,13 +197,45 @@ public class Model {
      * The viewing perspective has already been set,
      * so we are tilting the tiles in this column up.
      * */
-    public void tiltColumn(int x) {
+    public void  tiltColumn(int x) {
         // TODO: Task 7. Fill in this function.
+        for (int y = board.size() - 2; y >= 0; y--){
+            if (board.tile(x,y) != null) {
+                moveTileUpAsFarAsPossible(x, y);
+
+            }
+
+        }
+
     }
 
     public void tilt(Side side) {
         // TODO: Tasks 8 and 9. Fill in this function.
+        // Step 1: Change the perspective to the given side
+        board.setViewingPerspective(side);
+        boolean changed = false;
+        boolean[][] merged = new boolean[board.size()][board.size()];
+        isAnyTileMoved = false;
+
+        // Step 2: loop through each column and process it
+        for (int c = 0; c < board.size(); c++){
+            tiltColumn(c);
+
+
+
+        }
+        changed = isAnyTileMoved;
+
+
+
+        // Step 3: MUST switch the perspective back to NORTH
+        board.setViewingPerspective(Side.NORTH);
+
+
+
+        //checkGameOver();
     }
+
 
     /** Tilts every column of the board toward SIDE.
      */
