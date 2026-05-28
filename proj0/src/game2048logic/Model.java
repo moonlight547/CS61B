@@ -185,7 +185,10 @@ public class Model {
         }
 
         if (targetY > y) {
-            board.move(x,targetY,currTile);
+            board.move(x, targetY, currTile);
+            if (board.tile(x, targetY) != null && board.tile(x, targetY).wasMerged()) {
+                score += board.tile(x, targetY).value();
+            }
             isAnyTileMoved = true;
         }
 
@@ -213,14 +216,14 @@ public class Model {
         // TODO: Tasks 8 and 9. Fill in this function.
         // Step 1: Change the perspective to the given side
         board.setViewingPerspective(side);
+        board.resetMerged();
         boolean changed = false;
-        boolean[][] merged = new boolean[board.size()][board.size()];
+
         isAnyTileMoved = false;
 
         // Step 2: loop through each column and process it
         for (int c = 0; c < board.size(); c++){
             tiltColumn(c);
-
 
 
         }
@@ -230,6 +233,9 @@ public class Model {
 
         // Step 3: MUST switch the perspective back to NORTH
         board.setViewingPerspective(Side.NORTH);
+
+
+
 
 
 
