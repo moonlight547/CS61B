@@ -4,18 +4,20 @@ import java.util.*;
 
 @SuppressWarnings("unchecked")
 
-public class ArrayDeque61B <T> implements Deque61B<T>{
+public class MaxArrayDeque61B <T> implements Deque61B<T>{
     private T[] items;
     private int size;
     private int nextFirst;
     private int nextLast;
+    private Comparator<T> comparator;
 
 
-    public ArrayDeque61B() {
+    public MaxArrayDeque61B(Comparator<T> c) {
         items = (T[]) new Object[1000];
         size = 0;
         nextFirst = 0;
         nextLast = 1;
+        comparator = c;
 
     }
 
@@ -202,6 +204,26 @@ public class ArrayDeque61B <T> implements Deque61B<T>{
     @Override
     public String toString() {
         return toList().toString();
+    }
+
+
+
+    public T max() {
+        if(isEmpty()) {
+            return null;
+        }
+        return max(comparator);
+    }
+
+    public T max(Comparator<T> c) {
+        T max = get(0);
+        for (int i = 1; i < size; i++) {
+            T current = get(i);
+            if (c.compare(current, max) > 0) {
+                max = current;
+            }
+        }
+        return max;
     }
 
 }

@@ -8,6 +8,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+
 /** Performs some basic linked list tests. */
 public class LinkedListDeque61BTest {
 
@@ -124,8 +125,6 @@ public class LinkedListDeque61BTest {
         assertThat(lld1.size()).isEqualTo(2);
         assertThat(lld1.get(0)).isEqualTo(1);
     }
-
-
 
 
 }
