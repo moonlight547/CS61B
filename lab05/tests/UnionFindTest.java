@@ -86,6 +86,59 @@ public class UnionFindTest {
      * of all methods in your implementation.
      */
 
+    @Test
+    public void testConstructor() {
+        UnionFind uf = new UnionFind(5);
+
+        assertThat(uf.sizeOf(0)).isEqualTo(1);
+        assertThat(uf.sizeOf(4)).isEqualTo(1);
+    }
+
+    @Test
+    public void testConnectedAfterUnion() {
+        UnionFind uf = new UnionFind(5);
+        uf.union(0,1);
+        assertThat(uf.connected(0,1)).isTrue();
+    }
+
+    @Test
+    public void testMultipleUnions() {
+        UnionFind uf = new UnionFind(5);
+        uf.union(0,1);
+        uf.union(1,2);
+        uf.union(2,3);
+
+        uf.union(0,2);
+
+        assertThat(uf.connected(1,3)).isTrue();
+    }
+
+    @Test
+    public void testWeightedUnion() {
+        UnionFind uf = new UnionFind(5);
+        uf.union(0,1);
+        uf.union(1,2);
+        uf.union(2,3);
+
+        uf.union(0,2);
+
+        assertThat(uf.sizeOf(1)).isEqualTo(4);
+    }
+
+    @Test
+    public void testFindReturnsRoot() {
+        UnionFind uf = new UnionFind(5);
+        uf.union(0,1);
+        uf.union(1,2);
+        uf.union(2,3);
+
+        uf.find(3);
+        assertThat(uf.parent(3)).isEqualTo(1);
+    }
+
+
+
+
 }
 
 
