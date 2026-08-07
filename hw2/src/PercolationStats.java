@@ -14,6 +14,7 @@ public class PercolationStats {
         double[] ratio = new double[T];
         for (int i = 0; i < T; i += 1) {
             Percolation p = new Percolation(N);
+
             while (!p.percolates()) {
                 int randRow = StdRandom.uniform(N);
                 int randCol = StdRandom.uniform(N);
@@ -45,8 +46,11 @@ public class PercolationStats {
     public static void main(String[] args) {
 
         int trials = 100, gridSize = 50;
+
         PercolationStats ps = new PercolationStats(gridSize, trials);
+
         System.out.printf("Grid Size: %d x %d | Number of Trials: %d%n", gridSize, gridSize, trials);
+
         System.out.printf("The mean percolation threshold is %.2f%n", ps.mean());
         System.out.printf("The standard deviation of the percolation threshold is %.2f.%n", ps.stddev());
         System.out.printf("The 95%% confidence interval is [%.3f, %.3f].%n", ps.confidenceLow(), ps.confidenceHigh());
