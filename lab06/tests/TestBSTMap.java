@@ -2,6 +2,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import static com.google.common.truth.Truth.assertThat;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /** Tests by Brendan Hu, Spring 2015, revised for 2016 by Josh Hug and for 2023 by Noah Adhikari */
 public class TestBSTMap {
@@ -35,6 +37,25 @@ public class TestBSTMap {
             assertThat(b.get("hi" + i)).isNull();
             assertThat(b.containsKey("hi" + i)).isFalse();
         }
+    }
+
+    @Test
+    public void clearThenputTest() {
+        BSTMap<String, Integer> b = new BSTMap<>();
+        b.put("a", 1);
+        b.put("b", 2);
+        b.put("c", 3);
+
+        b.clear();
+
+        b.put("d", 4);
+
+        assertThat(b.get("d")).isEqualTo(4);
+        assertThat(b.containsKey("d")).isTrue();
+        assertThat(b.size()).isEqualTo(1);
+
+
+
     }
 
     // Assumes `put` is implemented properly.
@@ -112,6 +133,58 @@ public class TestBSTMap {
         b.put("b", "provolone");
         assertThat(b.size()).isEqualTo(5);
         assertThat(b.get("b")).isEqualTo("provolone");
+    }
+
+    @Test
+    public void iterator() {
+        BSTMap<String, Integer> b = new BSTMap<>();
+
+        b.put("d",4);
+        b.put("a",1);
+        b.put("c",3);
+        b.put("b",2);
+
+        Iterator<String> iter = b.iterator();
+
+
+        assertThat(iter.next()).isEqualTo("a");
+        assertThat(iter.next()).isEqualTo("b");
+        assertThat(iter.next()).isEqualTo("c");
+        assertThat(iter.next()).isEqualTo("d");
+
+    }
+
+    @Test
+    public void iteratorEmptyTest() {
+        BSTMap<String, Integer> b = new BSTMap<>();
+
+        Iterator<String> iter = b.iterator();
+
+        assertThat(iter.hasNext()).isFalse();
+    }
+
+    @Test
+    public void iteratorOneKey() {
+        BSTMap<String, Integer> b = new BSTMap<>();
+        b.put("a",1);
+
+        Iterator<String> iter = b.iterator();
+
+        assertThat(iter.hasNext()).isTrue();
+        assertThat(iter.next()).isEqualTo("a");
+        assertThat(iter.hasNext()).isFalse();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void iteratorNoNext() {
+        BSTMap<String, Integer> b = new BSTMap<>();
+        b.put("a",1);
+
+        Iterator<String> iter = b.iterator();
+
+        assertThat(iter.next()).isEqualTo("a");
+        iter.next();
+
     }
 
 }
