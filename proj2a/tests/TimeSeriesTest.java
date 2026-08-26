@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /** Unit Tests for the TimeSeries class.
  *  @author Josh Hug
@@ -54,5 +56,36 @@ public class TimeSeriesTest {
 
         assertThat(totalPopulation.years()).isEmpty();
         assertThat(totalPopulation.data()).isEmpty();
+    }
+
+    @Test
+    public void testDividedBy() {
+        TimeSeries catPopulation = new TimeSeries();
+
+        catPopulation.put(1994, 200.0);
+
+        TimeSeries dogPopulation = new TimeSeries();
+        dogPopulation.put(1994, 400.0);
+        dogPopulation.put(1995, 500.0);
+
+        TimeSeries divided = catPopulation.dividedBy(dogPopulation);
+
+        assertThat(divided.get(1994)).isEqualTo(0.5);
+    }
+
+    @Test
+    public void missingYearThrowsException() {
+        TimeSeries catPopulation = new TimeSeries();
+        catPopulation.put(1992, 100.0);
+
+        TimeSeries dogPopulation = new TimeSeries();
+        dogPopulation.put(1994, 400.0);
+
+        assertThrows(IllegalArgumentException.class,() -> {
+            catPopulation.dividedBy(dogPopulation);
+        });
+
+
+
     }
 } 
