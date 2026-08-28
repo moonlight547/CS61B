@@ -73,4 +73,103 @@ public class NGramMapTest {
         assertThat(fishPlusDogWeight.get(1865)).isWithin(1E-10).of(expectedFishPlusDogWeight1865);
     }
 
+    @Test
+    public void testcountHistoryNonexistentWord() {
+        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+        TimeSeries result = ngm.countHistory("zxcv");
+
+        assertThat(result.size()).isEqualTo(0);
+
+    }
+
+    @Test
+    public void testcountHistoryWithYearsNonexistentWord() {
+        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+        TimeSeries result = ngm.countHistory("zxcv", 2005,2007);
+
+        assertThat(result.size()).isEqualTo(0);
+
+    }
+
+    @Test
+    public void testweightHistoryNonexistentWord() {
+        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+        TimeSeries result = ngm.weightHistory("zxcv");
+
+        assertThat(result.size()).isEqualTo(0);
+
+    }
+
+    @Test
+    public void testweightHistoryWithYearNonexistentWord() {
+        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+        TimeSeries result = ngm.weightHistory("zxcv", 2005, 2007);
+
+        assertThat(result.size()).isEqualTo(0);
+
+    }
+
+    @Test
+    public void testsummedWeightHistoryNonexistentWord() {
+        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+        TimeSeries result = ngm.weightHistory("zxcv", 2005, 2007);
+
+        assertThat(result.size()).isEqualTo(0);
+
+    }
+
+    @Test
+    public void testsummedWeightHistoryWithOneNonexistentWord() {
+        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+        List<String> requestAndZxcv = new ArrayList<>();
+        requestAndZxcv.add("request");
+        requestAndZxcv.add("zxcv");
+
+        TimeSeries result1 = ngm.summedWeightHistory(requestAndZxcv, 2005, 2007);
+
+        List<String> request = new ArrayList<>();
+        request.add("request");
+
+        TimeSeries result2 = ngm.summedWeightHistory(request, 2005, 2007);
+
+        assertThat(result1.data()).isEqualTo(result2.data());
+        assertThat(result1.years()).isEqualTo(result2.years());
+
+    }
+
+    @Test
+    public void testOneCountHistory() {
+        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+
+        List<Integer> expectedYears = new ArrayList<>
+                (Arrays.asList(2005));
+        List<Double> expectedCounts = new ArrayList<>
+                (Arrays.asList(646179.0));
+        TimeSeries request2005 = ngm.countHistory("request",2005, 2005);
+        assertThat(request2005.years()).isEqualTo(expectedYears);
+        assertThat(request2005.data().get(0)).isWithin(1E-10).of(expectedCounts.get(0));
+
+
+    }
+
+    @Test
+    public void testtotalCountHistorydefensiveCopy() {
+        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+        TimeSeries result = ngm.totalCountHistory();
+        result.put(1470, 99999.0);
+        TimeSeries result2 = ngm.totalCountHistory();
+
+        assertThat(result2.get(1470)).isEqualTo(984.0);
+    }
+
+    @Test
+    public void testCountHistorydefensiveCopy() {
+        NGramMap ngm = new NGramMap(SHORT_WORDS_FILE, TOTAL_COUNTS_FILE);
+        TimeSeries result = ngm.countHistory("request");
+        result.put(2005, 99999.0);
+        TimeSeries result2 = ngm.countHistory("request");
+
+        assertThat(result2.get(2005)).isEqualTo(646179.0);
+    }
+
 }  
