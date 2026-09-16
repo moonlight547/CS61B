@@ -1,3 +1,4 @@
+
 import browser.NgordnetQuery;
 import browser.NgordnetQueryHandler;
 import browser.NgordnetQueryType;
@@ -12,12 +13,12 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
 /** Tests the case where the list of words is length greater than 1, but k is still zero. */
-public class TestMultiWordK0Hyponyms {
+public class TestMultiWordEECS {
     // this case doesn't use the NGrams dataset at all, so the choice of files is irrelevant
     public static final String VERY_SHORT_WORDS_FILE = "data/ngrams/very_short.csv";
     public static final String TOTAL_COUNTS_FILE = "data/ngrams/total_counts.csv";
-    public static final String SMALL_SYNSET_FILE = "data/wordnet/synsets16.txt";
-    public static final String SMALL_HYPONYM_FILE = "data/wordnet/hyponyms16.txt";
+    public static final String SMALL_SYNSET_FILE = "data/wordnet/synsets-EECS.txt";
+    public static final String SMALL_HYPONYM_FILE = "data/wordnet/hyponyms-EECS.txt";
     public static final String LARGE_SYNSET_FILE = "data/wordnet/synsets.txt";
     public static final String LARGE_HYPONYM_FILE = "data/wordnet/hyponyms.txt";
 
@@ -32,11 +33,11 @@ public class TestMultiWordK0Hyponyms {
     public void testOccurrenceAndChangeK0() {
         NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
                 VERY_SHORT_WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
-        List<String> words = List.of("occurrence", "change");
+        List<String> words = List.of("CS61B", "CS61C");
 
         NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0, NgordnetQueryType.HYPONYMS);
         String actual = studentHandler.handle(nq);
-        String expected = "[alteration, change, increase, jump, leap, modification, saltation, transition]";
+        String expected = "[CS162, CS164, CS169, CS186, bean]";
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -46,7 +47,7 @@ public class TestMultiWordK0Hyponyms {
     public void testTwoWordHasNoHyponyms() {
         NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
                 VERY_SHORT_WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
-        List<String> words = List.of("transition", "action");
+        List<String> words = List.of("EE137B", "EE142");
 
         NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0, NgordnetQueryType.HYPONYMS);
         String actual = studentHandler.handle(nq);
@@ -58,7 +59,7 @@ public class TestMultiWordK0Hyponyms {
     public void testThreeWordHyponyms() {
         NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
                 VERY_SHORT_WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
-        List<String> words = List.of("change", "action", "transition");
+        List<String> words = List.of("EE137B", "EE142", "EE192");
 
         NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0, NgordnetQueryType.HYPONYMS);
         String actual = studentHandler.handle(nq);
@@ -70,14 +71,15 @@ public class TestMultiWordK0Hyponyms {
     public void testTwoWordHasHyponyms() {
         NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
                 VERY_SHORT_WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
-        List<String> words = List.of("transition", "change");
+        List<String> words = List.of("CS61B", "CS61C");
 
         NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0, NgordnetQueryType.HYPONYMS);
         String actual = studentHandler.handle(nq);
-        String expected = "[jump, leap, saltation, transition]";
+        String expected = "[CS162, CS164, CS169, CS186, bean]";
         assertThat(actual).isEqualTo(expected);
     }
 
 
 
 }
+
